@@ -1,5 +1,6 @@
 {
 	"hosting": {
+		"site": "a2-austintaylor.web.app",
 		"public": "public",
 		"ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
 		"rewrites": [
