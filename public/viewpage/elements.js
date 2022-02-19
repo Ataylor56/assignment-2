@@ -11,13 +11,18 @@ export const formAddProduct = {
 	imageTag: document.getElementById('form-add-product-image-tag'),
 	imageButton: document.getElementById('form-add-product-image-button'),
 };
-
+export const formEditProduct = {
+	form: document.getElementById('form-edit-product'),
+	imageTag: document.getElementById('form-edit-product-image-tag'),
+	imageButton: document.getElementById('form-edit-product-image-button'),
+};
 //modals
 export const modalInfobox = {
 	modal: new bootstrap.Modal(document.getElementById('modal-infobox'), { backdrop: 'static' }),
 	title: document.getElementById('modal-infobox-title'),
 	body: document.getElementById('modal-infobox-body'),
 };
-//modals
 export const modalAddProduct = new bootstrap.Modal(document.getElementById('modal-add-product'), { backdrop: 'static' });
 export const modalSignin = new bootstrap.Modal(document.getElementById('modal-signin'), { backdrop: 'static' });
+
+export const modalEditProduct = new bootstrap.Modal(document.getElementById('modal-edit-product'), { backdrop: 'static' });

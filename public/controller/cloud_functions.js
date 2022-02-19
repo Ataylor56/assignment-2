@@ -26,3 +26,48 @@ export async function getProductList() {
 	});
 	return products;
 }
+
+const cfn_deleteProductDoc = httpsCallable(functions, 'cfn_deleteProductDoc');
+export async function deleteProductDoc(docId) {
+	await cfn_deleteProductDoc(docId);
+}
+
+const cfn_getProductById = httpsCallable(functions, 'cfn_getProductById');
+export async function getProductById(docId) {
+	const result = await cfn_getProductById(docId);
+	if (result.data) {
+		const product = new Product(result.data);
+		product.set_docId(result.data.docId);
+		return product;
+	} else {
+		return null;
+	}
+}
+
+const cfn_updateProductDoc = httpsCallable(functions, 'cfn_updateProductDoc');
+export async function updateProductDoc(product) {
+	const docId = product.docId;
+	const updateObject = product.toFirestoreForUpdate();
+	const result = await cfn_updateProductDoc({ docId, updateObject });
+}
+
+const cfn_getUserList = httpsCallable(functions, 'cfn_getUserList');
+export async function getUserList() {
+	const result = await cfn_getUserList({});
+	result.data.sort((a, b) => {
+		if (a.email > b.email) return 1;
+		if (a.email < b.email) return -1;
+		else return 0;
+	});
+	return result.data;
+}
+
+const cfn_updateUser = httpsCallable(functions, 'cfn_updateUser');
+export async function updateUser(uid, update) {
+	await cfn_updateUser({ uid, update });
+}
+
+const cfn_deleteUser = httpsCallable(functions, 'cfn_deleteUser');
+export async function deleteUser(uid) {
+	await cfn_deleteUser(uid);
+}

@@ -1,10 +1,12 @@
 export class Product {
 	constructor(data) {
-		this.name = data.name.toLowerCase().trim();
-		this.price = typeof data.price == 'number' ? data.price : Number(data.price);
-		this.summary = data.summary.trim();
-		this.imageName = data.imageName;
-		this.imageURL = data.imageURL;
+		if (data) {
+			this.name = data.name.toLowerCase().trim();
+			this.price = typeof data.price == 'number' ? data.price : Number(data.price);
+			this.summary = data.summary.trim();
+			this.imageName = data.imageName;
+			this.imageURL = data.imageURL;
+		}
 	}
 
 	set_docId(id) {
@@ -19,5 +21,16 @@ export class Product {
 			imageName: this.imageName,
 			imageURL: this.imageURL,
 		};
+	}
+
+	toFirestoreForUpdate() {
+		const p = {};
+		if (this.name) p.name = this.name;
+		if (this.price) p.price = this.price;
+		if (this.summary) p.summary = this.summary;
+		if (this.imageName) p.imageName = this.imageName;
+		if (this.imageURL) p.imageURL = this.imageURL;
+
+		return p;
 	}
 }
