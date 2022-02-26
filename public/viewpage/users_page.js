@@ -58,15 +58,38 @@ export async function users_page() {
 				await toggleDisableUser(e.target);
 				Util.enableButton(buttons[0], label);
 			} else if (submitter == 'DELETE') {
-				const label = Util.disableButton(buttons[1]);
+				const label = Util.disableButton(buttons[2]);
 				await deleteUser(e.target);
-				Util.enableButton(buttons[1], label);
+				Util.enableButton(buttons[2], label);
+			} else if (submitter == 'PASSWORD') {
+				Elements.modalChangePassword.addEventListener('submit', async (e) => {
+					e.preventDefault();
+					console.log('submitted password change!');
+				});
 			} else {
 				if (Constants.DEV) console.log(e);
 			}
 		});
 	}
 }
+
+async function changePassword(form) {
+	const uid = form.uid.value;
+	const newPw = form.password.value;
+
+	const update = {
+		password: newPw ? newPw : '',
+	};
+
+	try {
+		await CloudFunctions.updateUser(uid, update);
+		Util.info('Password updated for user -> ', uid);
+	} catch (e) {
+		if (Constants.DEV) console.log(e);
+		Util.info('Password change failed', JSON.stringify(e));
+	}
+}
+
 async function toggleDisableUser(form) {
 	const uid = form.uid.value;
 	const disabled = form.disabled.value;
@@ -108,7 +131,8 @@ function buildUserRow(user) {
                 <input type="hidden" name="uid" value="${user.uid}">
                 <input type="hidden" name="disabled" value="${user.disabled}">
                 <button type="submit" class="btn btn-outline-primary" onClick="this.form.submitter='TOGGLE'">Toggle Active</button>
-                <button type="submit" class="btn btn-outline-danger" onClick="this.form.submitter='DELETE'">Delete Account</button>
+                <button type="submit" class="btn btn-outline-primary" onClick="this.form.submitter="PASSWORD" data-bs-toggle="modal" data-bs-target="#modal-change-password">Change Password</button>
+				<button type="submit" class="btn btn-outline-danger" onClick="this.form.submitter='DELETE'">Delete Account</button>
             </form>
         </td>
     </tr>

@@ -9,13 +9,14 @@ import * as CloudStorage from '../controller/cloud_storage.js';
 import * as EditProduct from '../controller/edit_product.js';
 
 let imageFileToUpload = null;
+let filterValue = null;
 
 export function addEventListeners() {
 	Elements.menuHome.addEventListener('click', async () => {
 		history.pushState(null, null, routePathNames.HOME);
 		const button = Elements.menuHome;
 		const label = Util.disableButton(button);
-		await home_page();
+		await home_page({});
 		Util.enableButton(button, label);
 	});
 
@@ -34,23 +35,41 @@ export function addEventListeners() {
 
 	Elements.formAddProduct.form.addEventListener('submit', addNewProduct);
 }
-export async function home_page() {
+export async function home_page(props) {
 	if (!currentUser) {
 		Elements.root.innerHTML = '<h1>Protected Page </h1>';
 		return;
 	}
+	if (!props) {
+		filterValue = 'name';
+	} else {
+		filterValue = props.filterValue;
+	}
+
+	const dropdownList = await getDropdownList();
+
 	let html = `
-        <div>
-            <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal-add-product">
+        <div class="d-flex flex-row ">
+			<li class="dropdown px-3">
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+				Order By: ${filterValue.toUpperCase()}
+				</a>
+				<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+					${dropdownList}
+				</ul>
+			</li>
+            <button class="btn btn-outline-danger px-3" data-bs-toggle="modal" data-bs-target="#modal-add-product">
                 + Add Product
             </button>
         </div>
+
+		<br>
     `;
 
 	let products;
 
 	try {
-		products = await CloudFunctions.getProductList();
+		products = await CloudFunctions.getProductList({ filterValue });
 	} catch (e) {
 		if (Constants.DEV) console.log(e);
 		Util.info('Cannot get product list', JSON.stringify(e));
@@ -63,6 +82,15 @@ export async function home_page() {
 	});
 
 	Elements.root.innerHTML = html;
+
+	const dropdownOptions = document.getElementsByClassName('filter');
+	for (let j = 0; j < dropdownOptions.length; j++) {
+		dropdownOptions[j].addEventListener('click', async (e) => {
+			e.preventDefault();
+			filterValue = dropdownOptions[j].id;
+			await home_page({ filterValue });
+		});
+	}
 
 	const forms = document.getElementsByClassName('form-edit-delete-product');
 	for (let i = 0; i < forms.length; i++) {
@@ -88,12 +116,20 @@ export async function home_page() {
 async function addNewProduct(e) {
 	e.preventDefault();
 	const name = e.target.name.value;
+	const brand = e.target.brand.value;
+	const model = e.target.model.value;
+	const productStyle = e.target.productStyle.value;
 	const price = e.target.price.value;
+	const stock = e.target.stock.value;
 	const summary = e.target.summary.value;
 
 	const product = new Product({
 		name,
+		brand,
+		model,
+		productStyle,
 		price,
+		stock,
 		summary,
 	});
 	const button = e.target.getElementsByTagName('button')[0];
@@ -109,7 +145,7 @@ async function addNewProduct(e) {
 		e.target.reset();
 		Elements.formAddProduct.imageTag.removeAttribute('src');
 		Elements.formAddProduct.imageTag.style.display = 'none';
-		await home_page();
+		await home_page({ filterValue });
 	} catch (e) {
 		if (Constants.DEV) console.log(JSON.stringify(e));
 		Util.info('Add product failed', `${JSON.stringify(e)}`, Elements.modalAddProduct);
@@ -137,4 +173,18 @@ function buildProductCard(product) {
         </div>
     </div>
     `;
+}
+
+async function getDropdownList() {
+	let html = '';
+	if (filterValue != 'name') {
+		html += `<li id="name" class="filter"><a class="dropdown-item" href="#">Name</a></li>`;
+	}
+	if (filterValue != 'brand') {
+		html += `<li id="brand" class="filter"><a class="dropdown-item" href="#">Brand</a></li>`;
+	}
+	if (filterValue != 'price') {
+		html += `<li id="price" class="filter"><a class="dropdown-item" href="#">Price</a></li>`;
+	}
+	return html;
 }

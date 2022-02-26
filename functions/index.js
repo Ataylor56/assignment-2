@@ -26,18 +26,24 @@ async function addProduct(data, context) {
 	}
 }
 
-exports.cfn_getProductList = functions.https.onCall(async (data, context) => {
+exports.cfn_getProductList = functions.https.onCall(async (filter, context) => {
 	if (!authorized(context.auth.token.email)) {
 		if (Constants.DEV) console.log(e);
 		throw new functions.https.HttpsError('permission-denied', 'Only admin may invoke the getProductList function');
 	}
+	let filterValue = null;
+	if (!filter.filterValue) {
+		filterValue = 'name';
+	} else {
+		filterValue = filter.filterValue;
+	}
 
 	try {
 		let products = [];
-		const snapshot = await admin.firestore().collection(Constants.COLLECTION_NAMES.PRODUCTS).orderBy('name').get();
+		const snapshot = await admin.firestore().collection(Constants.COLLECTION_NAMES.PRODUCTS).orderBy(filterValue).get();
 		snapshot.forEach((doc) => {
-			const { name, price, summary, imageName, imageURL } = doc.data();
-			const p = { name, price, summary, imageName, imageURL };
+			const { name, brand, model, productStyle, price, stock, summary, imageName, imageURL } = doc.data();
+			const p = { name, brand, model, productStyle, price, stock, summary, imageName, imageURL };
 			p.docId = doc.id;
 			products.push(p);
 		});
@@ -70,8 +76,8 @@ exports.cfn_getProductById = functions.https.onCall(async (docId, context) => {
 	try {
 		const doc = await admin.firestore().collection(Constants.COLLECTION_NAMES.PRODUCTS).doc(docId).get();
 		if (doc.exists) {
-			const { name, summary, price, imageName, imageURL } = doc.data();
-			const p = { name, summary, price, imageName, imageURL };
+			const { name, brand, model, productStyle, summary, price, stock, imageName, imageURL } = doc.data();
+			const p = { name, brand, model, productStyle, summary, price, stock, imageName, imageURL };
 			p.docId = doc.id;
 			return p;
 		} else {

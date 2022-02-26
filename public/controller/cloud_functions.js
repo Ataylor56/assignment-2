@@ -16,9 +16,10 @@ export async function addProduct(product) {
 }
 
 const cfn_getProductList = httpsCallable(functions, 'cfn_getProductList');
-export async function getProductList() {
+export async function getProductList(filter) {
+	const filterValue = filter.filterValue;
 	const products = [];
-	const result = await cfn_getProductList({});
+	const result = await cfn_getProductList({ filterValue });
 	result.data.forEach((element) => {
 		const p = new Product(element);
 		p.set_docId(element.docId);

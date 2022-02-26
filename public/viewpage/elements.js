@@ -22,6 +22,7 @@ export const modalInfobox = {
 	title: document.getElementById('modal-infobox-title'),
 	body: document.getElementById('modal-infobox-body'),
 };
+export const modalChangePassword = new bootstrap.Modal(document.getElementById('modal-change-password'), { backdrop: 'static' });
 export const modalAddProduct = new bootstrap.Modal(document.getElementById('modal-add-product'), { backdrop: 'static' });
 export const modalSignin = new bootstrap.Modal(document.getElementById('modal-signin'), { backdrop: 'static' });
 

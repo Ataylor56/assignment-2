@@ -27,13 +27,21 @@ export function addEventListeners() {
 		const label = Util.disableButton(button);
 
 		const newName = e.target.name.value;
+		const newBrand = e.target.brand.value;
+		const newModel = e.target.model.value;
+		const newProductStyle = e.target.productStyle.value;
 		const newPrice = e.target.price.value;
+		const newStock = e.target.stock.value;
 		const newSummary = e.target.summary.value;
 
 		const update = new Product();
 		update.docId = e.target.docId.value;
 		if (newName != product.name) update.name = newName;
+		if (newBrand != product.brand) update.brand = newBrand;
+		if (newModel != product.model) update.model = newModel;
+		if (newProductStyle != product.productStyle) update.productStyle = newProductStyle;
 		if (newPrice != product.price) update.price = newPrice;
+		if (newStock != product.stock) update.stock = newStock;
 		if (newSummary != product.summary) update.summary = newSummary;
 
 		try {
@@ -57,15 +65,15 @@ export function addEventListeners() {
                 `;
 			}
 
-			const info = `Update: ${update.name ? 'name' : ''} ${update.price ? 'price' : ''} ${update.summary ? 'summary' : ''} ${
-				imageFile2Upload ? 'image' : ''
-			}`;
+			const info = `Update: ${update.name ? 'name' : ''} ${update.brand ? 'brand' : ''} 
+			${update.model ? 'model' : ''} ${update.style ? 'style' : ''} 
+			${update.price ? 'price' : ''} ${update.stock ? 'stock' : ''} 
+			${update.summary ? 'summary' : ''} ${imageFile2Upload ? 'image' : ''}`;
 			Util.info('Update Success!', info, Elements.modalEditProduct);
 		} catch (e) {
 			if (Constants.DEV) console.log(e);
 			Util.info('Update product error:', JSON.stringify(e), Elements.modalEditProduct);
 		}
-
 		Util.enableButton(button, label);
 	});
 }
@@ -87,7 +95,11 @@ export async function edit_product(docId) {
 	Elements.formEditProduct.form.docId.value = product.docId;
 	Elements.formEditProduct.form.imageName.value = product.imageName;
 	Elements.formEditProduct.form.name.value = product.name;
+	Elements.formEditProduct.form.brand.value = product.brand;
+	Elements.formEditProduct.form.model.value = product.model;
+	Elements.formEditProduct.form.productStyle.value = product.productStyle;
 	Elements.formEditProduct.form.price.value = product.price;
+	Elements.formEditProduct.form.stock.value = product.stock;
 	Elements.formEditProduct.form.summary.value = product.summary;
 	Elements.formEditProduct.imageTag.src = product.imageURL;
 	Elements.formEditProduct.imageButton.value = null;

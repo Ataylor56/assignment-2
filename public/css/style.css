@@ -6,6 +6,10 @@
 	background-color: navy;
 }
 
+li {
+	list-style-type: none;
+}
+
 li.nav-item {
 	padding: 4px;
 }

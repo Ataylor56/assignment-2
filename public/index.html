@@ -100,7 +100,19 @@ aria-labelledby="modal-add-product-title" aria-hidden="true" role="dialog">
           <input type="text" name="name" required minlength="2" placeholder="Product Name">
         </div>
         <div>
+          <input type="text" name="brand" required minlength="2" placeholder="Brand Name">
+        </div>
+        <div>
+          <input type="text" name="model" required minlength="1" placeholder="Model Name">
+        </div>
+        <div>
+          <input type="text" name="productStyle" required minlength="2" placeholder="Product Style">
+        </div>
+        <div>
           <input type="number" name="price" required min="0" step="0.01" placeholder="Price ($)">
+        </div>
+        <div>
+          <input type="number" name="stock" required min="0" step="1" placeholder="Number In Stock">
         </div>
         <div>
         Summary: <br>
@@ -137,7 +149,19 @@ aria-labelledby="modal-edit-product-title" aria-hidden="true" role="dialog">
           Name: <input type="text" name="name" required minlength="2" placeholder="Product Name">
         </div>
         <div>
+          Brand: <input type="text" name="brand" required minlength="2" placeholder="Brand Name">
+        </div>
+        <div>
+          Model: <input type="text" name="model" required minlength="1" placeholder="Model Name">
+        </div>
+        <div>
+          Style: <input type="text" name="productStyle" required minlength="2" placeholder="Product Style">
+        </div>
+        <div>
           Price: <input type="number" name="price" required min="0" step="0.01" placeholder="Price ($)">
+        </div>
+        <div>
+          Number In Stock: <input type="number" name="stock" required min="0" step="1" placeholder="Number In Stock">
         </div>
         <div>
         Summary: <br>
@@ -156,6 +180,30 @@ aria-labelledby="modal-edit-product-title" aria-hidden="true" role="dialog">
 </div>
 </div>
 <!-- Edit Product Modal -->
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="modal-change-password" data-backdrop="static" data-keyboard="false" tabindex="-1"
+aria-labelledby="modal-change-password-label" aria-hidden="true" role="dialog">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="modal-change-password-label">Change Password</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form id="form-change-password" method="post">
+        <div>
+          <input type="password" name="password" placeholder="New Password">
+        </div>
+        <div>
+          <button id="button-change-password" class="btn btn-outline-primary" type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+<!-- Change Password Modal -->
 
     <!-- root -->
     <div id="root" class="bg-light p-5 m-3"></div>
