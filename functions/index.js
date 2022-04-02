@@ -42,8 +42,8 @@ exports.cfn_getProductList = functions.https.onCall(async (filter, context) => {
 		let products = [];
 		const snapshot = await admin.firestore().collection(Constants.COLLECTION_NAMES.PRODUCTS).orderBy(filterValue).get();
 		snapshot.forEach((doc) => {
-			const { name, brand, model, productStyle, price, stock, summary, imageName, imageURL } = doc.data();
-			const p = { name, brand, model, productStyle, price, stock, summary, imageName, imageURL };
+			const { name, type, brand, model, productStyle, price, stock, summary, imageName, imageURL } = doc.data();
+			const p = { name, type, brand, model, productStyle, price, stock, summary, imageName, imageURL };
 			p.docId = doc.id;
 			products.push(p);
 		});
@@ -76,8 +76,8 @@ exports.cfn_getProductById = functions.https.onCall(async (docId, context) => {
 	try {
 		const doc = await admin.firestore().collection(Constants.COLLECTION_NAMES.PRODUCTS).doc(docId).get();
 		if (doc.exists) {
-			const { name, brand, model, productStyle, summary, price, stock, imageName, imageURL } = doc.data();
-			const p = { name, brand, model, productStyle, summary, price, stock, imageName, imageURL };
+			const { name, type, brand, model, productStyle, summary, price, stock, imageName, imageURL } = doc.data();
+			const p = { name, type, brand, model, productStyle, summary, price, stock, imageName, imageURL };
 			p.docId = doc.id;
 			return p;
 		} else {

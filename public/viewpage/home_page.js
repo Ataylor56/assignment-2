@@ -116,6 +116,7 @@ export async function home_page(props) {
 async function addNewProduct(e) {
 	e.preventDefault();
 	const name = e.target.name.value;
+	const type = e.target.type.value;
 	const brand = e.target.brand.value;
 	const model = e.target.model.value;
 	const productStyle = e.target.productStyle.value;
@@ -125,6 +126,7 @@ async function addNewProduct(e) {
 
 	const product = new Product({
 		name,
+		type,
 		brand,
 		model,
 		productStyle,
@@ -163,7 +165,7 @@ function buildProductCard(product) {
         <img src="${product.imageURL}" class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title">${product.name}</h5>
-            <p class="card-text">${product.price.toFixed(2)}<br>${product.summary}</p>
+            <p class="card-text">${product.price.toFixed(2)}<br>${product.type}<br>${product.summary}</p>
             <form class="form-edit-delete-product" method="post">
                 <input type="hidden" name="docId" value="${product.docId}">
                 <input type="hidden" name="imageName" value="${product.imageName}">
